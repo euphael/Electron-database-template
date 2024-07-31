@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
+import DataTable from './utils/dataTable';
 
 export default function App() {
   const [data, setData] = useState([]);
@@ -14,23 +15,7 @@ export default function App() {
 
   return (
     <div className="App">
-      <h1>Dados do Banco de Dados</h1>
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((item) => (
-            <tr key={item.id}>
-              <td>{item.id}</td>
-              <td>{item.name}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+     <DataTable data={data} />
     </div>
   );
 }
