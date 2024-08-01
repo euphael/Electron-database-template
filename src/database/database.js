@@ -37,4 +37,18 @@ function fetchData() {
   });
 }
 
-module.exports = { db, fetchData };
+function updateData(id, name, dataInicio, dataFim, cargo){
+  return new Promise((resolve, reject) => {
+    const stmt = db.prepare("UPDATE funcionarios SET name = ?, dataInicio = ?, dataFim = ?, cargo = ? WHERE id = ?")
+    stmt.run(name, dataInicio, dataFim, cargo, id, function(err){
+      if (err){
+        reject(err);
+      }else {
+        resolve({ changes: this.changes });
+      }
+    });
+    stmt.finalize();
+  });
+}
+
+module.exports = { db, fetchData, updateData };

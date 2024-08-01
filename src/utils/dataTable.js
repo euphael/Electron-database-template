@@ -1,6 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
+import ScheduleForm from './scheduleForm';
 
 const DataTable = ({ data }) => {
+  const [selectedItem, setSelectedItem] = useState(null);
+
+  const handleButtonClick = (item) => {
+    setSelectedItem(item);
+  };
+
+  const handleCloseForm = () => {
+    setSelectedItem(null);
+  };
+
   return (
     <div className="DataTable">
       <h1>Dados do Banco de Dados</h1>
@@ -12,6 +23,7 @@ const DataTable = ({ data }) => {
             <th>Data inicio</th>
             <th>Data fim</th>
             <th>Cargo</th>
+            <th>Ações</th>
           </tr>
         </thead>
         <tbody>
@@ -22,10 +34,16 @@ const DataTable = ({ data }) => {
               <td>{item.dataInicio}</td>
               <td>{item.dataFim}</td>
               <td>{item.cargo}</td>
+              <td>
+                <button onClick={() => handleButtonClick(item)}>
+                  Definir Horário
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
+      <ScheduleForm selectedItem={selectedItem} onClose={handleCloseForm} />
     </div>
   );
 };
