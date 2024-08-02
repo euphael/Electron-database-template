@@ -10,14 +10,13 @@ const db = new sqlite3.Database(path.join(__dirname, 'funcionarios.db'), (err) =
   console.log('Conectado ao banco de dados SQLite.');
 
   db.serialize(() => {
-    db.run("CREATE TABLE IF NOT EXISTS funcionarios (id INTEGER PRIMARY KEY, name TEXT, dataInicio DATE, dataFim DATE, cargo TEXT)");
+    db.run("CREATE TABLE IF NOT EXISTS funcionarios (id INTEGER PRIMARY KEY, name TEXT, dataInicio DATE, cargo TEXT)");
 
-    // const stmt = db.prepare("INSERT INTO funcionarios (name, dataInicio, dataFim, cargo) VALUES (?, ?, ?, ?)");
-    // stmt.run("NTESTE", "2023-01-01", "2023-12-31", "Desenvolvedor");
-    // stmt.run("NTESTE2", "2023-02-01", "2023-11-30", "Designer");
-    // stmt.run("TEADEA", "2023-03-01", "2023-10-31", "Gerente");
+    // const stmt = db.prepare("INSERT INTO funcionarios (name, dataInicio, cargo) VALUES (?, ?, ?)");
+    // stmt.run("NTESTE", "2023-01-01", "Desenvolvedor");
+    // stmt.run("NTESTE2", "2023-02-01", "Designer");
+    // stmt.run("TEADEA", "2023-03-01", "Gerente");
     // stmt.finalize();
-    
   });
 });
 
@@ -29,7 +28,6 @@ function fetchData() {
       } else {
         rows.forEach(row => {
           row.dataInicio = formatarData(row.dataInicio);
-          row.dataFim = formatarData(row.dataFim);
         });
         resolve(rows);
       }
@@ -37,13 +35,13 @@ function fetchData() {
   });
 }
 
-function updateData(id, name, dataInicio, dataFim, cargo){
+function updateData(id, name, dataInicio, cargo) {
   return new Promise((resolve, reject) => {
-    const stmt = db.prepare("UPDATE funcionarios SET name = ?, dataInicio = ?, dataFim = ?, cargo = ? WHERE id = ?")
-    stmt.run(name, dataInicio, dataFim, cargo, id, function(err){
-      if (err){
+    const stmt = db.prepare("UPDATE funcionarios SET name = ?, dataInicio = ?, cargo = ? WHERE id = ?");
+    stmt.run(name, dataInicio, cargo, id, function (err) {
+      if (err) {
         reject(err);
-      }else {
+      } else {
         resolve({ changes: this.changes });
       }
     });

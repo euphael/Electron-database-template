@@ -38,9 +38,9 @@ ipcMain.handle('fetch-data', async (event, args) => {
   }
 });
 
-ipcMain.handle('update-data', async (event, id, name, dataInicio, dataFim, cargo) => {
+ipcMain.handle('update-data', async (event, id, name, dataInicio, cargo) => {
   try {
-    const result = await updateData(id, name, dataInicio, dataFim, cargo);
+    const result = await updateData(id, name, dataInicio, cargo);
     return result;
   } catch (err) {
     console.error('Erro ao atualizar dados:', err.message);

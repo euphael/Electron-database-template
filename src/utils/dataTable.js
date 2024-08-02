@@ -14,14 +14,21 @@ const DataTable = ({ data }) => {
 
   return (
     <div className="DataTable">
-      <h1>Dados do Banco de Dados</h1>
+      <h1>Dados dos funcionários</h1>
+
+      <button className="register-button" onClick={() => '#default'}>
+        Cadastrar funcionário
+      </button>
+
+      <br /> 
+      <br /> 
+
       <table>
         <thead>
           <tr>
             <th>ID</th>
             <th>Name</th>
             <th>Data inicio</th>
-            <th>Data fim</th>
             <th>Cargo</th>
             <th>Ações</th>
           </tr>
@@ -32,18 +39,20 @@ const DataTable = ({ data }) => {
               <td>{item.id}</td>
               <td>{item.name}</td>
               <td>{item.dataInicio}</td>
-              <td>{item.dataFim}</td>
               <td>{item.cargo}</td>
               <td>
-                <button onClick={() => handleButtonClick(item)}>
-                  Definir Horário
+                <button className="update-button" onClick={() => handleButtonClick(item)}>
+                  Editar
                 </button>
               </td>
             </tr>
+
           ))}
         </tbody>
       </table>
+
       <ScheduleForm selectedItem={selectedItem} onClose={handleCloseForm} />
+
     </div>
   );
 };
