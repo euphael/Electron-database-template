@@ -13,6 +13,7 @@ const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('electron', {
   fetchData: () => ipcRenderer.invoke('fetch-data'),
-  updateData: (id, name, dataInicio, cargo) => ipcRenderer.invoke('update-data', id, name, dataInicio, cargo)
+  updateData: (id, name, dataInicio, cargo) => ipcRenderer.invoke('update-data', id, name, dataInicio, cargo),
+  createData: (name, dataInicio, cargo) => ipcRenderer.invoke('create-data', name, dataInicio, cargo)
 });
 

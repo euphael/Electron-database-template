@@ -1,6 +1,7 @@
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 const { formatarData } = require('../utils/dateUtils');
+const { create } = require('domain');
 
 const db = new sqlite3.Database(path.join(__dirname, 'funcionarios.db'), (err) => {
   if (err) {
@@ -35,6 +36,20 @@ function fetchData() {
   });
 }
 
+function createData(name, dataInicio, cargo){
+  return new Promise((resolve, reject) => {
+    const stmt = db.prepare("INSERT INTO funcionarios (name, dataInicio, cargo) VALUES (?, ?, ?)");
+    stmt.run(name, dataInicio, cargo, function (err) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve({ id: this.lastID});
+      }
+    });
+    stmt.finalize();
+  });
+}
+
 function updateData(id, name, dataInicio, cargo) {
   return new Promise((resolve, reject) => {
     const stmt = db.prepare("UPDATE funcionarios SET name = ?, dataInicio = ?, cargo = ? WHERE id = ?");
@@ -49,4 +64,4 @@ function updateData(id, name, dataInicio, cargo) {
   });
 }
 
-module.exports = { db, fetchData, updateData };
+module.exports = { db, fetchData, updateData, createData };

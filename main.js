@@ -1,6 +1,6 @@
 const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require('path');
-const { fetchData, updateData } = require('./src/database/database');
+const { fetchData, createData, updateData } = require('./src/database/database');
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -34,6 +34,16 @@ ipcMain.handle('fetch-data', async (event, args) => {
     return data;
   } catch (err) {
     console.error('Erro ao buscar dados:', err.message);
+    throw err;
+  }
+});
+
+ipcMain.handle('create-data', async (event, name, dataInicio, cargo) => {
+  try {
+    const result = await createData(name, dataInicio, cargo);
+    return result;
+  } catch (err) {
+    console.error('Erro ao criar dados', err.message);
     throw err;
   }
 });
