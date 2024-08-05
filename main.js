@@ -1,6 +1,6 @@
 const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require('path');
-const { selectFuncionarios, createData, updateData, deleteData, selectCargos } = require('./src/database/database');
+const { selectFuncionarios, createData, updateData, deleteData, selectCargos, createHorasPositivas, createHorasNegativas } = require('./src/database/database');
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -38,8 +38,18 @@ ipcMain.handle('select-funcionarios', async (event, args) => {
   }
 });
 
+ipcMain.handle('select-funcionarios-by-cargo', async (event, cargo) => {
+  try {
+    const func = await selectFuncionariosByCargo(cargo);
+    return func;
+  } catch (err) {
+    console.error('Erro ao buscar dados por cargo:', err.message);
+    throw err;
+  }
+});
+
 ipcMain.handle('select-cargos', async (event, args) => {
-  try{
+  try {
     const cargos = await selectCargos();
     return cargos
   } catch (err) {
@@ -48,9 +58,9 @@ ipcMain.handle('select-cargos', async (event, args) => {
   }
 })
 
-ipcMain.handle('create-data', async (event, name, dataInicio, cargo) => {
+ipcMain.handle('create-data', async (event, name, dataInicio, horasPositivas, horasNegativas, cargo) => {
   try {
-    const result = await createData(name, dataInicio, cargo);
+    const result = await createData(name, dataInicio, horasPositivas, horasNegativas, cargo);
     return result;
   } catch (err) {
     console.error('Erro ao criar dados', err.message);
@@ -58,9 +68,9 @@ ipcMain.handle('create-data', async (event, name, dataInicio, cargo) => {
   }
 });
 
-ipcMain.handle('update-data', async (event, id, name, dataInicio, cargo) => {
+ipcMain.handle('update-data', async (event, id, name, dataInicio, horasPositivas, horasNegativas, cargo) => {
   try {
-    const result = await updateData(id, name, dataInicio, cargo);
+    const result = await updateData(id, name, dataInicio, horasPositivas, horasNegativas, cargo);
     return result;
   } catch (err) {
     console.error('Erro ao atualizar dados:', err.message);
@@ -76,4 +86,24 @@ ipcMain.handle('delete-data', async (event, id) => {
     console.error('Error ao deletar dados: ', err.message);
     throw err;
   }
-})
+});
+
+ipcMain.handle('create-horas-positivas', async (event, id, horas) => {
+  try {
+    const result = await createHorasPositivas(id, horas);
+    return result;
+  } catch (err) {
+    console.error('Erro ao criar horas positivas:', err.message);
+    throw err;
+  }
+});
+
+ipcMain.handle('create-horas-negativas', async (event, id, horas) => {
+  try {
+    const result = await createHorasNegativas(id, horas);
+    return result;
+  } catch (err) {
+    console.error('Erro ao criar horas negativas:', err.message);
+    throw err;
+  }
+});

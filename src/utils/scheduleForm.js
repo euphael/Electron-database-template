@@ -24,18 +24,18 @@ const ScheduleForm = ({ selectedItem, onClose }) => {
 
     const name = event.target.name.value;
     const datainicio = event.target.dataInicio.value;
+    const horasPositivas = event.target.horasPositivas.value;
+    const horasNegativas = event.target.horasNegativas.value;
     const cargo = event.target.cargo.value;
 
     try {
       // Verificação adicionada para determinar se estamos atualizando um item existente ou criando um novo
       if (selectedItem) {
         //Atualizar item existente
-        await window.electron.updateData(selectedItem.id, name, datainicio, cargo);
-      }
-
-      else {
+        await window.electron.updateData(selectedItem.id, name, datainicio, horasPositivas, horasNegativas, cargo);
+      } else {
         // Criar novo item
-        await window.electron.createData(name, datainicio, cargo);
+        await window.electron.createData(name, datainicio, horasPositivas, horasNegativas, cargo);
       }
       onClose();
       window.location.reload();
@@ -59,6 +59,15 @@ const ScheduleForm = ({ selectedItem, onClose }) => {
         </label>
         <br />
         <label>
+          Horas Positivas:
+          <input type="time" name="horasPositivas" defaultValue={selectedItem ? selectedItem.horasPositivas : ''} />
+        </label>
+        <br />
+        <label>
+          Horas Negativas:
+          <input type="time" name="horasNegativas" defaultValue={selectedItem ? selectedItem.horasNegativas : ''} />
+        </label>
+        <label>
           Cargo:
           <select name="cargo" defaultValue={selectedItem ? selectedItem.cargo : ''}>
             {cargos.map(cargo => (
@@ -68,6 +77,7 @@ const ScheduleForm = ({ selectedItem, onClose }) => {
             ))}
           </select>
         </label>
+        <br />
         <br />
         <button type="submit">Salvar</button>
         <button type="button" onClick={onClose}>Cancelar</button>

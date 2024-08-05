@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import ScheduleForm from './scheduleForm';
+import moment from 'moment';
 
 const DataTable = ({ data, addFunc }) => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [isRegistering, setIsRegistering] = useState(false);
+  
+  const [cargos, setCargos] = useState([]);
+  const [selectedCargo, setSelectedCargo] = useState('');
 
   const insertButton = async (newFunc) => {
     try {
@@ -40,6 +44,22 @@ const DataTable = ({ data, addFunc }) => {
     <div className="DataTable">
       <h1>Dados dos funcionários</h1>
 
+      <div>
+        <label htmlFor="cargo-select">Selecione o Cargo: </label>
+        <select
+          id="cargo-select"
+          value={selectedCargo}
+          onChange={(e) => setSelectedCargo(e.target.value)}
+        >
+          <option value="">Todos</option>
+          {cargos.map((cargo) => (
+            <option key={cargo.id} value={cargo.name}>
+              {cargo.name}
+            </option>
+          ))}
+        </select>
+      </div>
+
       <button className="register-button" onClick={() => setIsRegistering(true)}>
         Cadastrar funcionário
       </button>
@@ -53,29 +73,42 @@ const DataTable = ({ data, addFunc }) => {
             <th>ID</th>
             <th>Name</th>
             <th>Data inicio</th>
+            <th>Horas positivas</th>
+            <th>Horas negativas</th>
+            <th>Total de horas</th>
             <th>Cargo</th>
             <th>Ações</th>
           </tr>
         </thead>
         <tbody>
-          {data.map((item) => (
-            <tr key={item.id}>
-              <td>{item.id}</td>
-              <td>{item.name}</td>
-              <td>{item.dataInicio}</td>
-              <td>{item.cargo}</td>
-              <td>
-                <button className="update-button" onClick={() => updateButton(item)}>
-                  Editar
-                </button>
-              </td>
-              <td>
-                <button className="delete-button" onClick={() => deleteButton(item)}>
-                  Deletar
-                </button>
-              </td>
-            </tr>
-          ))}
+          {data.map((item) => {
+            const horasPositivas = moment.duration(item.horasPositivas);
+            const horasNegativas = moment.duration(item.horasNegativas);
+            const diferenca = horasPositivas.subtract(horasNegativas);
+            
+
+            return (
+              <tr key={item.id}>
+                <td>{item.id}</td>
+                <td>{item.name}</td>
+                <td>{item.dataInicio}</td>
+                <td>{item.horasPositivas}</td>
+                <td>{item.horasNegativas}</td>
+                <td>{`${diferenca.hours()}:${diferenca.minutes()}`}</td>
+                <td>{item.cargo}</td>
+                <td>
+                  <button className="update-button" onClick={() => updateButton(item)}>
+                    Editar
+                  </button>
+                </td>
+                <td>
+                  <button className="delete-button" onClick={() => deleteButton(item)}>
+                    Deletar
+                  </button>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
 
