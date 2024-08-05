@@ -43,11 +43,11 @@ table {
   width: 50%;
 }
 
-.register-button, .update-button {
+.register-button, .update-button, .delete-button {
   height: auto;
   margin-bottom: 20px; 
   padding: 10px 20px;
-  background-color: #4CAF50; /* Cor de fundo */
+  background-color: #757575; /* Cor de fundo */
   color: white; /* Cor do texto */
   border: none; /* Remover borda */
   border-radius: 5px; /* Bordas arredondadas */
@@ -58,6 +58,10 @@ table {
 
 .register-button:hover, .update-button:hover {
   background-color: #45a049; /* Cor de fundo ao passar o mouse */
+}
+
+.delete-button:hover{
+  background-color: red;
 }
 
 th, td {

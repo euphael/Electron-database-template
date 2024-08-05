@@ -1,6 +1,6 @@
 const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require('path');
-const { fetchData, createData, updateData } = require('./src/database/database');
+const { selectFuncionarios, createData, updateData, deleteData, selectCargos } = require('./src/database/database');
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -28,15 +28,25 @@ app.on("window-all-closed", () => {
   if (process.platform !== "darwin") app.quit();
 });
 
-ipcMain.handle('fetch-data', async (event, args) => {
+ipcMain.handle('select-funcionarios', async (event, args) => {
   try {
-    const data = await fetchData();
-    return data;
+    const func = await selectFuncionarios();
+    return func;
   } catch (err) {
     console.error('Erro ao buscar dados:', err.message);
     throw err;
   }
 });
+
+ipcMain.handle('select-cargos', async (event, args) => {
+  try{
+    const cargos = await selectCargos();
+    return cargos
+  } catch (err) {
+    console.error('Erro ao buscar cargos: ', err.message);
+    throw err;
+  }
+})
 
 ipcMain.handle('create-data', async (event, name, dataInicio, cargo) => {
   try {
@@ -57,3 +67,13 @@ ipcMain.handle('update-data', async (event, id, name, dataInicio, cargo) => {
     throw err;
   }
 });
+
+ipcMain.handle('delete-data', async (event, id) => {
+  try {
+    const result = await deleteData(id);
+    return result
+  } catch (err) {
+    console.error('Error ao deletar dados: ', err.message);
+    throw err;
+  }
+})

@@ -12,8 +12,10 @@ window.addEventListener("DOMContentLoaded", () => {
 const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('electron', {
-  fetchData: () => ipcRenderer.invoke('fetch-data'),
+  selectFuncionarios: () => ipcRenderer.invoke('select-funcionarios'),
+  selectCargos: () => ipcRenderer.invoke('select-cargos'),
   updateData: (id, name, dataInicio, cargo) => ipcRenderer.invoke('update-data', id, name, dataInicio, cargo),
-  createData: (name, dataInicio, cargo) => ipcRenderer.invoke('create-data', name, dataInicio, cargo)
+  createData: (name, dataInicio, cargo) => ipcRenderer.invoke('create-data', name, dataInicio, cargo),
+  deleteData: (id) => ipcRenderer.invoke('delete-data', id)
 });
 

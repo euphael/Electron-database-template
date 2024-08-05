@@ -13,11 +13,22 @@ const DataTable = ({ data, addFunc }) => {
     } catch (error) {
       console.error("Erro ao adicionar funcionário.", error);
     }
-  }; // Adiciona função para lidar com a submissão do novo funcionário
+  };
 
   const updateButton = (item) => {
     setSelectedItem(item);
     setIsRegistering(false); // Garante que o formulário de cadastro não esteja aberto
+  };
+
+  const deleteButton = async (item) => {
+    if (window.confirm(`Tem certeza que deseja deletar o funcionário ${item.name}?`)) {
+      try {
+        await window.electron.deleteData(item.id);
+        window.location.reload();
+      } catch (error) {
+        console.error("Erro ao deletar.", error);
+      }
+    }
   };
 
   const handleCloseForm = () => {
@@ -58,6 +69,11 @@ const DataTable = ({ data, addFunc }) => {
                   Editar
                 </button>
               </td>
+              <td>
+                <button className="delete-button" onClick={() => deleteButton(item)}>
+                  Deletar
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>
@@ -68,7 +84,7 @@ const DataTable = ({ data, addFunc }) => {
       )}
 
       {selectedItem && !isRegistering && (
-        <ScheduleForm selectedItem={selectedItem} onClose={handleCloseForm} />
+        <ScheduleForm selectedItem={selectedItem} onSubmit={insertButton} onClose={handleCloseForm} />
       )}
     </div>
   );

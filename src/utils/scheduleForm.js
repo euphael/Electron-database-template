@@ -1,10 +1,27 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 const ScheduleForm = ({ selectedItem, onClose }) => {
+  const [cargos, setCargos] = useState([]);
+
+  // Função que busca cargos existentes
+  const fetchCargos = async () => {
+    try {
+      const cargos = await window.electron.selectCargos()
+      setCargos(cargos)
+    } catch (error) {
+      console.error('Erro ao buscar cargos: ', error)
+    }
+  }
+
+  // Carregar os cargos quando o componente for montado
+  useEffect(() => {
+    fetchCargos();
+  }, []);
 
   // Função para lidar com o envio do formulário
   const handleSubmit = async (event) => {
     event.preventDefault();
+
     const name = event.target.name.value;
     const datainicio = event.target.dataInicio.value;
     const cargo = event.target.cargo.value;
@@ -20,7 +37,6 @@ const ScheduleForm = ({ selectedItem, onClose }) => {
         // Criar novo item
         await window.electron.createData(name, datainicio, cargo);
       }
-
       onClose();
       window.location.reload();
     } catch (error) {
@@ -44,7 +60,13 @@ const ScheduleForm = ({ selectedItem, onClose }) => {
         <br />
         <label>
           Cargo:
-          <input type="text" name="cargo" defaultValue={selectedItem ? selectedItem.cargo : ''} />
+          <select name="cargo" defaultValue={selectedItem ? selectedItem.cargo : ''}>
+            {cargos.map(cargo => (
+              <option key={cargo.id} value={cargo.name}>
+                {cargo.name}
+              </option>
+            ))}
+          </select>
         </label>
         <br />
         <button type="submit">Salvar</button>
