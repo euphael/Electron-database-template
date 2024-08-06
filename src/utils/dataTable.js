@@ -1,13 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ScheduleForm from './scheduleForm';
 import moment from 'moment';
 
-const DataTable = ({ data, addFunc }) => {
+const DataTable = ({ addFunc }) => {
+  const [data, setData] = useState([]);
   const [selectedItem, setSelectedItem] = useState(null);
   const [isRegistering, setIsRegistering] = useState(false);
-  
   const [cargos, setCargos] = useState([]);
   const [selectedCargo, setSelectedCargo] = useState('');
+
+  useEffect(() => {
+    // Busca todos os cargos
+    window.electron.selectCargos().then((results) => {
+      setCargos(results);
+    }).catch((error) => {
+      console.error('Erro ao buscar cargos:', error);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (selectedCargo) {
+      // Buscar funcionários pelo cargo selecionado
+      window.electron.selectFuncionariosByCargo(selectedCargo).then((results) => {
+        setData(results);
+      }).catch((error) => {
+        console.error('Erro ao buscar dados:', error);
+      });
+    } else {
+      // Buscar todos os funcionários se nenhum cargo estiver selecionado
+      window.electron.selectFuncionarios().then((results) => {
+        setData(results);
+      }).catch((error) => {
+        console.error('Erro ao buscar dados:', error);
+      });
+    }
+  }, [selectedCargo]);
 
   const insertButton = async (newFunc) => {
     try {
@@ -44,6 +71,11 @@ const DataTable = ({ data, addFunc }) => {
     <div className="DataTable">
       <h1>Dados dos funcionários</h1>
 
+      <button className="register-button" onClick={() => setIsRegistering(true)}>
+        Cadastrar funcionário
+      </button>
+      <br />
+
       <div>
         <label htmlFor="cargo-select">Selecione o Cargo: </label>
         <select
@@ -59,12 +91,6 @@ const DataTable = ({ data, addFunc }) => {
           ))}
         </select>
       </div>
-
-      <button className="register-button" onClick={() => setIsRegistering(true)}>
-        Cadastrar funcionário
-      </button>
-
-      <br />
       <br />
 
       <table>
@@ -85,7 +111,6 @@ const DataTable = ({ data, addFunc }) => {
             const horasPositivas = moment.duration(item.horasPositivas);
             const horasNegativas = moment.duration(item.horasNegativas);
             const diferenca = horasPositivas.subtract(horasNegativas);
-            
 
             return (
               <tr key={item.id}>

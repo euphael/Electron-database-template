@@ -40,7 +40,7 @@
 table {
   margin: 0 auto;
   border-collapse: collapse;
-  width: auto;
+  width: 90%;
 }
 
 .register-button, .update-button, .delete-button {

@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Banco de horas",
+  "name": "Banco de horas",
   "icons": [
     {
       "src": "favicon.ico",

@@ -1,6 +1,6 @@
 const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require('path');
-const { selectFuncionarios, createData, updateData, deleteData, selectCargos, createHorasPositivas, createHorasNegativas } = require('./src/database/database');
+const { selectFuncionarios, selectFuncionariosByCargo, createData, updateData, deleteData, selectCargos, createHorasPositivas, createHorasNegativas } = require('./src/database/database');
 
 function createWindow() {
   const win = new BrowserWindow({

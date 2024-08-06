@@ -83,7 +83,6 @@ function selectCargos() {
 }
 
 function createData(name, dataInicio, horasPositivas, horasNegativas, cargoName) {
-  console.log('createData called with:', { name, dataInicio, horasPositivas, horasNegativas, cargoName }); // Adicione este log para depuração
   return new Promise((resolve, reject) => {
     db.get("SELECT id FROM cargos WHERE name = ?", [cargoName], (err, row) => {
       if (err) {
@@ -138,7 +137,6 @@ function createData(name, dataInicio, horasPositivas, horasNegativas, cargoName)
 //   });
 
 function updateData(id, name, dataInicio, horasPositivas, horasNegativas, cargoName) {
-  console.log('updateData called with:', { id, name, dataInicio, horasPositivas, horasNegativas, cargoName }); // Adicione este log para depuração
   return new Promise((resolve, reject) => {
     db.get("SELECT id FROM cargos WHERE name = ?", [cargoName], (err, row) => {
       if (err) {
