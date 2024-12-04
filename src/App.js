@@ -6,7 +6,7 @@ export default function App() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    window.electron.fetchData().then((results) => {
+    window.electron.selectFuncionarios().then((results) => {
       setData(results);
     }).catch((error) => {
       console.error('Erro ao buscar dados:', error);
